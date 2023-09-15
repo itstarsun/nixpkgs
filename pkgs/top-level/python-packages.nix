@@ -6,7 +6,13 @@
 #
 # For more details, please see the Python section in the Nixpkgs manual.
 
-self: super: with self; {
+self: super: with self;
+let
+  frida' = pkgs.frida.override {
+    python3Packages = self;
+  };
+in
+{
 
   bootstrap = lib.recurseIntoAttrs {
     flit-core = toPythonModule (callPackage ../development/python-modules/bootstrap/flit-core { });
@@ -4158,7 +4164,9 @@ self: super: with self; {
 
   freezegun = callPackage ../development/python-modules/freezegun { };
 
-  frida-python = callPackage ../development/python-modules/frida-python { };
+  frida = frida'.frida-python;
+
+  frida-tools = frida'.frida-tools;
 
   frigidaire = callPackage ../development/python-modules/frigidaire { };
 
